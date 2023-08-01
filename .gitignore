@@ -1,0 +1,7 @@
+/node_modules/
+/tmp/
+/node_modules/
+/images/
+/tokens/
+
+.env
