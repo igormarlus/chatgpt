@@ -55,13 +55,20 @@ var cc = 0;
                 } else {
                     resolve(body);
                     //return false;
-                    //console.log("NIVEL USUSARIO:");
-                    console.log(body);
+                    
                     //var nivel_user = parseInt(body);
                     //console.log("CALL REQUEST: "+body);
                     //console.log(message.type);
                     ///////////////////////////////////////////  NEW CODE
                     const obj = JSON.parse(body);
+
+                    console.log("obj:");
+                    console.log(obj.length);
+                    if(obj.length == 0){
+                        console.log("Sem perguntas");
+                        return false;
+                    }
+                    
                     //console.log("call1");
                     //console.log(obj);
                     var id_produto = 0;
@@ -83,6 +90,8 @@ var cc = 0;
                           if(titulo == null){
                             console.log("Sem perguntas");
                             return false;
+                          }else{
+                            console.log("passou sem perguntas");
                           }
                           q = titulo;
                           nome_produto = obj[h].modelo;

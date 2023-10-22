@@ -111,12 +111,12 @@ var q = "Faça uma copy persuasiva para venda de um chatbot para delivery tendo 
   console.log("Frase de marketing: "+resposta2);
   
 
-  const response = await openai.createImage({
-    prompt: "a white siamese cat",
-    n: 1,
-    size: "1024x1024",
-  });
-  image_url = response.data.data[0].url;
+  // const response = await openai.createImage({
+  //   prompt: "a white siamese cat",
+  //   n: 1,
+  //   size: "1024x1024",
+  // });
+  // image_url = response.data.data[0].url;
 
 
   // topicos para projeções
