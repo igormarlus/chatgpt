@@ -20,9 +20,10 @@
     "https": "^1.0.0",
     "jquery": "^3.6.3",
     "jsdom": "^21.0.0",
+    "natural": "^6.8.0",
     "openai": "^3.3.0",
     "request": "^2.88.2",
     "requests": "^0.3.0",
-    "superchats": "^3.1.3"
+    "superchats": "^3.1.4"
   }
 }

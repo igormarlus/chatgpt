@@ -10,6 +10,11 @@ import superchats from "superchats";
 import request from "request";
 
 
+import natural from "natural";
+
+
+//const natural = require('natural');
+
 
 
 const configuration = new Configuration({
@@ -24,7 +29,7 @@ const configuration = new Configuration({
   ////////////// CHATBOT SUPERCHAT
   async function start(){
         var id_user = 36; 
-        var id_cliente = 36; 
+        var id_cliente = 31; 
         let client = await superchats.create({
             session: "AI",
             license: "QKQ0ZDOOGO-XLQQJKW82M-LJSAHROR3Q-MQ4M107WUN",
@@ -123,6 +128,28 @@ const configuration = new Configuration({
                 if(message.type == "text"){
                     var msg = message.content;
 
+                    console.log("NPL conectada...");
+                    // var desfrag = await natural.tokenizer("Isso é um exemplo de tokenização");
+                    // console.log("tokenizer... "+desfrag);
+                     //console.log('Diferença de String entre Amol e Amol: ', natural.HammingDistance("Amol","Amol" , false));
+                    // console.log('Diferença de String entre Amol e Anmol: ', natural.HammingDistance("Amol","Anmol" , false));
+                    // console.log('Diferença de String entre Amol e ABCD: ', natural.HammingDistance("Amol","ABCD" , false));
+                    // var trat_msg = new natural.Tokenizer(msg);
+                    // console.log('trat_msg : ', trat_msg);
+                    // var classifier = new natural.BayesClassifier();
+                    // // Dados de exemplo
+                    // classifier.addDocument('buy stock', 'buy');
+                    // classifier.addDocument('buy more', 'buy');
+                    // classifier.addDocument('short sell', 'sell');
+                    // classifier.addDocument('sell stock', 'sell');
+                    // // Dados para Treino
+                    // classifier.train();
+                    // // Testando com novos dados
+                    // console.log('Result for `Today, I buy my first stock`: ', classifier.classify('Today, I buy my first stock'));
+                    // console.log('Result for `Yesterday, I brought my first stock`: ', classifier.classify('Today, I brought my first stock'));
+                    // console.log('Result for `Tomorrow, I will sell all my stocks`: ', classifier.classify('Tomorrow, I will sell all my stocks'));
+                    
+                    //return false;
                     // RESET  e chama a lista inicial
                     //if(msg === "A.I"){
                     
@@ -170,7 +197,7 @@ const configuration = new Configuration({
 
                         // X IMAGEM
 
-                        function fazerConsulta(from,to=0) {
+                        function fazerConsulta(from,to=0,q="") {
                             return new Promise((resolve, reject) => {
                               const url_endpointpost = "https://chatbot-whatsapp-br.com.br/whats/get_conversa_wzap/" + from;
                           
@@ -194,7 +221,8 @@ const configuration = new Configuration({
 
                           // Em algum lugar do seu código, você pode usar a função fazerConsulta:
                           var to = message.participant;
-                        fazerConsulta(from,to)
+                          
+                        fazerConsulta(from,to,msg)
                         .then(body => {
                             console.log(body); // Aqui você pode acessar a resposta da consulta
                             var historico = JSON.parse(body);
@@ -211,7 +239,7 @@ const configuration = new Configuration({
 
                             // FONTE: https://platform.openai.com/docs/guides/gpt-best-practices/strategy-write-clear-instructions
                             // prdutos inovadores
-                            var prompt_base = "Eu sou uma atendente virtual de um site onde oferecemos vários produtos online e você tem que ser gentil e persiasiva para convencer o usuário a realizar uma compra em nosso site. Responda a pergunta dele sempre com educaçãoe em torno de 20 palavras. Não precisa criar textos longos, apenas ofereça 1 produto com link por vez.";
+                            var prompt_base = "Eu sou uma atendente virtual de um site onde oferecemos vários produtos online e você tem que ser gentil e persiasiva para convencer o usuário a realizar uma compra em nosso site. Responda a pergunta dele sempre com educaçãoe em torno de 20 palavras. Não precisa criar textos longos, apenas ofereça 1 produto com link por vez. Quando for informado algum de nossos produtos sempre calcule o valor do pedido e informe.";
                             // garota de 22 anos 
                             //var prompt_base = "Seu nome é Lucy, converse como uma uma garota de 22 anos, mora em Recife no bairro do espinheiro, não informe exatamente aonde mora. Sempre que responder uma pergunta faça outra de forma sinpática, carismática, elegante e atrativa. gosto de sair e me devertir com minhas amigas. Responde com no máximo 15 palavras  e sempre demostre interesse em continuar a conversa. Não seja tão formal e sim gentil e simpática, buscando sempre continuar a conversa.";
 
@@ -241,205 +269,231 @@ const configuration = new Configuration({
                             //var response = await openai.createCompletion({
                             var base_roles = [];
 
-                            ///////////////////////////  CODIGO A.I PELO chatgpt
-                            const messages = [
-                            {
-                                "role": "system",
-                                "content": prompt_base
-                            },
-                            /*
-                            {
-                                "role": "assistant",
-                                "content": 'Se for enviado um texto que contenha a palavra """sugar""", explique esse conteúdo a seguir: O relacionamento Sugar, foi criado pelos americanos há mais uma década, mas nos últimos anos, criou-se um mercado em torno de pessoas que buscam um relacionamento benéfico para ambos, onde dinheiro não é um tabu. VENHA FAZER PARTE DESSE UNIVERSO. SEJA UMA SUGAR BABY AMBICIOSA.'
-                            },
-                            {
-                                "role" : "assistant",
-                                "content" : "Após a pessoa demostrar interesse mande o link [https://go.hotmart.com/N78576577V](https://go.hotmart.com/N78576577V) "
-                            }
-                            */
-                            ];
 
-                            if(historico != "0" && historico != 0){
+                            // DELIVERY
 
-                                historico.forEach(conversa => {
-                                    // console.log(conversa.role);
-                                    // console.log(conversa.content);
-                                    // console.log("---------------");
-                                    messages.push({
-                                    "role": conversa.role,
-                                    "content": conversa.content
-                                    });
-                                    // messages.push({
-                                    //   "role": "assistant",
-                                    //   "content": conversa.assistantMessage
-                                    // });
-                                });
-                            }
-                          
-                              // Adicione a nova mensagem do usuário ao final do histórico.
-                              messages.push({
-                                "role": "user",
-                                "content": '"""'+q+'"""'
-                              });
-                              /////////////////////////// XX CODIGO A.I PELO chatgpt
-
-
-                              ///////////////  FUNCTION DO CHATGPT
-                            //   const functions = [
-                            //     {
-                            //         "name": "get_current_weather",
-                            //         "description": "Pega informações climaticas",
-                            //         "parameters": {
-                            //             "type": "object",
-                            //             "properties": {
-                            //                 "location": {
-                            //                     "type": "string",
-                            //                     "description": "A cidade e estado, e.g. Recife, PE",
-                            //                 },
-                            //                 "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
-                            //             },
-                            //             "required": ["location"],
-                            //         },
-                            //     }
-                            // ];
-                            const functions_clima = [
-                                {
-                                    "name": "get_current_weather",
-                                    "description": "Get the current weather",
-                                    "parameters": {
-                                        "type": "object",
-                                        "properties": {
-                                            "location": {
-                                                "type": "string",
-                                                "description": "The city and state, e.g. San Francisco, CA",
-                                            },
-                                            "format": {
-                                                "type": "string",
-                                                "enum": ["celsius", "fahrenheit"],
-                                                "description": "The temperature unit to use. Infer this from the users location.",
-                                            },
-                                        },
-                                        "required": ["location", "format"],
-                                    },
-                                },
-                                {
-                                    "name": "get_n_day_weather_forecast",
-                                    "description": "Get an N-day weather forecast",
-                                    "parameters": {
-                                        "type": "object",
-                                        "properties": {
-                                            "location": {
-                                                "type": "string",
-                                                "description": "The city and state, e.g. San Francisco, CA",
-                                            },
-                                            "format": {
-                                                "type": "string",
-                                                "enum": ["celsius", "fahrenheit"],
-                                                "description": "The temperature unit to use. Infer this from the users location.",
-                                            },
-                                            "num_days": {
-                                                "type": "integer",
-                                                "description": "The number of days to forecast",
-                                            }
-                                        },
-                                        "required": ["location", "format", "num_days"]
-                                    },
-                                },
-                            ];
-                          
-
-                            console.log("ROLES::::");
-                            //return false;
-                           
-                            
-                            console.log(messages);
-                            //console.log(functions);
-                            // messages
-
-                            var call_response =  openai.createChatCompletion({
-                                //model: "text-davinci-003", // vinda na documentação
-                                model: "gpt-3.5-turbo", // vinda na documentação                            
-                                max_tokens:50,
-                                //top_p: 1.0,                            
-                                //prompt: prompt_base + ": " + conversa.join(' '),
-                                messages,
-                                //functions: functions_clima,
-                                
-                                /*
-                                messages: [
-
-                                    {
-                                        "role" : "system",
-                                        "content" : prompt_base
-                                    },
-                                */                                        
-                                    //temperature: 0.2, // até 1, quanto maior mais diverso, quanto menor mais preciso
-                                    temperature: 0.9, // até 1, quanto maior mais diverso, quanto menor mais preciso
-                            })
-                            .then(function(response){
-                                //console.log(response);
-                            
-
-                                let call;
-                                //call = response.data.data[0].url;
-                                console.log("status: "+response);
-                                console.log("CHOICE: "+response.data.choices[0]);
-                                call = response;
-                                console.log(call.data);
-                                var status = response.status;
-                                var texto_arr = response.data.choices[0].message;
-                                var texto  = response.data.choices[0].message.content;
-                                console.log(texto_arr);
-                                console.log(texto);
-
-                                // SETA NO BANCO
-                                var url_endpointpost = "https://chatbot-whatsapp-br.com.br/whats/get_dd_wzap/"+from; 
+                            var url_endpointpost = "https://chatbot-whatsapp-br.com.br/app/get_cardapio/0/"+id_cliente; 
                                 request.post({
                                     url: url_endpointpost,
                                     form: {
                                         key: 'value',
-                                        'roles_ai' : "assistant",
-                                        'whats' : to,
-                                        'nome' : "BOT" ,
-                                        'contato' : from , 
-                                        'msg' : texto , 
-                                        'id_user' : 8, 
-                                        'id_produto' : 8 , 
-                                        'id_whats' : "888" , 
-                                        'isgroup' : 0 , 
-                                        'id_group' : 0
+                                        'q' : q,                                        
                                     }
-                                }, function(err, httpResponse, body) {
+                                }, function(err, httpResponse, data_list) {
                                     return new Promise(function(resolve, reject) {
                                         if (err) {
                                             reject(err);
                                         } else {
-                                            resolve(body);
-                                            console.log(body);                                    
-                                            console.log("dados do BOT salvo");                                    
+                                            resolve(data_list);
+                                            console.log("data_list cardapio:");
+                                            console.log(data_list);
+
+                                            //return false;
+
+                                            var tit = "--";
+                        
+                                            tit = message.selectDisplay;
+                                            const obj = JSON.parse(data_list);
+                                            console.log("obj::::::");
+                                            console.log(obj);
+                                            //return false;
+                                            if(obj != "0" && obj != 0){
+
+                                                var oo = [{title : "Cardápio "}];
+                                                var arr_rows = [];
+                                                var cardapio_inicial = " Cardápio: ";
+                                                // $##############  LISTA
+                                                for(var h=0; h<obj.length; h++){
+                                                    console.log(obj);
+                                                    console.log("ARRAY json: "+obj.length)
+                                                    if(h <= obj.length){
+                                                        //arr_rows[h] = {title:  obj[h].nome, description: obj[h].descricao  ,rowId: obj[h].id}
+                                                        arr_rows[h] = {title:  obj[h].modelo, description: "💵 R$ "+obj[h].preco_venda+" \n🗒️ "+obj[h].especificacoes,  rowId: h}
+                                                        //cardapio_inicial += obj[h].modelo+", valor: "+obj[h].preco_venda+", descrição: "+obj[h].especificacoes;
+                                                        cardapio_inicial += obj[h].modelo+", valor: R$ "+obj[h].preco_venda+"["+obj[h].preco_venda+"]";
+                                                    }
+                                                    
+                                                }
+                                            } // x if !+ 0
+                                            else{
+                                                var cardapio_inicial = "Seja gentil, educada e descontraída para poder realizar um bom atendimento e concluir o pedido";
+                                            }
+                                            //oo[0]['Pratos'] = arr_rows;
+                                            //console.log(data_list);
+                                            console.log("Parou aqui 1");
+
+                                            //var map = map((prato, index) => `${index + 1}. ${prato.modelo}: ${prato.especificacoes}`).join('\n');
+                                            // const cardapioFormatado = `**Cardápio:**\n` +
+                                            // data_list.map((prato, index) => `${index + 1}. ${prato.modelo}: ${prato.especificacoes}`).join('\n');
+
+                                            //const prompt_base = `${cardapioFormatado}\nAqui está o cardápio. O que você gostaria de pedir?`;
+                                            const prompt_base = "Você está falando com nosso atendente de delivery. Aqui está um link para o nosso cardápio completo: [Cardápio Completo](https://chatbot-whatsapp-br.com.br/app/cardapio/31). Como posso ajudar você hoje?";
+                                            console.log(cardapio_inicial);
+                                    
+
+                                            //return false;
+                                            // X DELIVERY
+
+                                            //console.log(messages);
+
+                                            console.log("Parou aqui 2");
+
+                                            if(obj != "0" && obj != 0){              
+
+                                                var messages = [
+                                                    {
+                                                        "role": "system",
+                                                        "content": cardapio_inicial
+                                                    },
+                                                    {
+                                                        "role": "assistant",
+                                                        "content": prompt_base
+                                                    },
+                                                ];
+                                            }else{
+
+                                                var messages = [
+                                                    {
+                                                        "role": "system",
+                                                        "content": prompt_base
+                                                    },                                                    
+                                                ];
+
+                                            }
+
+                                            console.log("Parou aqui 3");
+
+
+                                            ///////////////////////////  CODIGO A.I PELO chatgpt
+                                            
+                                            console.log(historico);
+                                            console.log(messages);
+                                            //return false;
+                                            if(historico != "0" && historico != 0){
+
+                                                historico.forEach(conversa => {
+                                                    // console.log(conversa.role);
+                                                    // console.log(conversa.content);
+                                                    // console.log("---------------");
+                                                    messages.push({
+                                                    "role": conversa.role,
+                                                    "content": conversa.content
+                                                    });
+                                                    // messages.push({
+                                                    //   "role": "assistant",
+                                                    //   "content": conversa.assistantMessage
+                                                    // });
+                                                });
+                                            }
+                                        
+                                            // Adicione a nova mensagem do usuário ao final do histórico.
+                                            messages.push({
+                                                "role": "user",
+                                                "content": '"""'+q+'"""'
+                                            });
+                                            /////////////////////////// XX CODIGO A.I PELO chatgpt
+
+
+                                    
+                                            
+                                            console.log("ROLES::::");
+                                            //return false;
+                                        
+                                            
+                                            console.log(messages);
+                                            //console.log(functions);
+                                            // messages
+
+                                            var call_response =  openai.createChatCompletion({
+                                                //model: "text-davinci-003", // vinda na documentação
+                                                model: "gpt-3.5-turbo", // vinda na documentação                            
+                                                max_tokens:100,
+                                                //top_p: 1.0,                            
+                                                //prompt: prompt_base + ": " + conversa.join(' '),
+                                                messages,
+                                                //functions: functions_clima,
+                                                
+                                                /*
+                                                messages: [
+
+                                                    {
+                                                        "role" : "system",
+                                                        "content" : prompt_base
+                                                    },
+                                                */                                        
+                                                    //temperature: 0.2, // até 1, quanto maior mais diverso, quanto menor mais preciso
+                                                    temperature: 0.9, // até 1, quanto maior mais diverso, quanto menor mais preciso
+                                            })
+                                            .then(function(response){
+                                                //console.log(response);
+                                            
+
+                                                let call;
+                                                //call = response.data.data[0].url;
+                                                console.log("status: "+response);
+                                                console.log("CHOICE: "+response.data.choices[0]);
+                                                call = response;
+                                                console.log(call.data);
+                                                var status = response.status;
+                                                var texto_arr = response.data.choices[0].message;
+                                                var texto  = response.data.choices[0].message.content;
+                                                console.log(texto_arr);
+                                                console.log(texto);
+
+                                                // SETA NO BANCO
+                                                var url_endpointpost = "https://chatbot-whatsapp-br.com.br/whats/get_dd_wzap/"+from; 
+                                                request.post({
+                                                    url: url_endpointpost,
+                                                    form: {
+                                                        key: 'value',
+                                                        'roles_ai' : "assistant",
+                                                        'whats' : to,
+                                                        'nome' : "BOT" ,
+                                                        'contato' : from , 
+                                                        'msg' : texto , 
+                                                        'id_user' : 8, 
+                                                        'id_produto' : 8 , 
+                                                        'id_whats' : "888" , 
+                                                        'isgroup' : 0 , 
+                                                        'id_group' : 0
+                                                    }
+                                                }, function(err, httpResponse, body) {
+                                                    return new Promise(function(resolve, reject) {
+                                                        if (err) {
+                                                            reject(err);
+                                                        } else {
+                                                            resolve(body);
+                                                            console.log(body);                                    
+                                                            console.log("dados do BOT salvo");                                    
+                                                        } // x else if err promiss pos get_dd_wzap
+                                                    }); // x function get_dd_wzap
+                                                }); // x request post get_dd_wzap
+
+
+                                                // X SETA NO BANCO 
+
+
+                                                client.sendText(message.from,texto,message.id)
+                                                .then((result) => {
+                                                    console.log("A.I respondeu com sucesso!");
+                                                })
+                                            })
+                                            
+                                                
+                                            // ############################################################################## X A.I
+
                                         } // x else if err promiss pos get_dd_wzap
                                     }); // x function get_dd_wzap
                                 }); // x request post get_dd_wzap
-
-
-                                // X SETA NO BANCO 
-
-
-                                client.sendText(message.from,texto,message.id)
-                                .then((result) => {
-                                    console.log("A.I respondeu com sucesso!");
-                                })
-                            })
-                            
-                                
-                            // ############################################################################## X A.I
-
 
 
                         }) // xxxxxxxxxxxxxxxxxxxxx then xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
                         .catch(err => {
                             console.error(err); // Trate qualquer erro que possa ocorrer na consulta
                         });
+
+
+                    
 
 
 
