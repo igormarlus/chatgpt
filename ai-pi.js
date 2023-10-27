@@ -286,10 +286,10 @@ const configuration = new Configuration({
                                                         //arr_rows[h] = {title:  obj[h].nome, description: obj[h].descricao  ,rowId: obj[h].id}
                                                         arr_rows[h] = {title:  obj[h].modelo, description: "💵 R$ "+obj[h].preco_venda+" \n🗒️ "+obj[h].especificacoes,  rowId: h}
                                                         //cardapio_inicial += obj[h].modelo+", valor: "+obj[h].preco_venda+", descrição: "+obj[h].especificacoes;
-                                                        if( obj[h].preco_venda > 0){
-                                                            cardapio_inicial += obj[h].modelo+", valor: R$ "+obj[h].preco_venda+"["+obj[h].preco_venda+"]";    
-                                                        }else{
+                                                        if( obj[h].preco_venda > 0){                                                            
                                                             cardapio_inicial += obj[h].modelo+", Descrição: "+obj[h].descricao+"  valor: R$ "+obj[h].preco+"["+obj[h].preco+"], link para compra: "+obj[h].link+"["+obj[h].link+"] ";
+                                                        }else{
+                                                            cardapio_inicial += obj[h].modelo+", Descrição: "+obj[h].descricao+", link para compra: "+obj[h].link+"["+obj[h].link+"] ";
                                                         }
                                                         
                                                     }
