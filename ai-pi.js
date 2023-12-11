@@ -215,7 +215,7 @@ const configuration = new Configuration({
 
                             // FONTE: https://platform.openai.com/docs/guides/gpt-best-practices/strategy-write-clear-instructions
                             // prdutos inovadores
-                            var prompt_base = "Eu sou uma atendente virtual de um site onde oferecemos vários produtos online e você tem que ser gentil e persiasiva para convencer o usuário a realizar uma compra em nosso site. Responda a pergunta dele sempre com educaçãoe em torno de 20 palavras. Não precisa criar textos longos, apenas ofereça 1 produto com link por vez. Quando for informado algum de nossos produtos sempre calcule o valor do pedido e informe.";
+                            var prompt_base = "Responda as perguntas como uma atendente de um site quem vende Produtos físicos e online e materiais (ebooks, vídeos, cursos) para estudos em vários segmentos.Responda como uma pessoa gentil e persiasiva para convencer o usuário a realizar uma compra em nosso site. Responda a pergunta dele sempre em torno de 20 palavras. Não responda textos longos, apenas ofereça 1 produto com **link** (enviado no prompt role system) (pesquise no histórico da conversa assistant) por vez. Quando for informado algum de nossos produtos sempre envie o link e o valor.";
                             // garota de 22 anos 
                             //var prompt_base = "Seu nome é Lucy, converse como uma uma garota de 22 anos, mora em Recife no bairro do espinheiro, não informe exatamente aonde mora. Sempre que responder uma pergunta faça outra de forma sinpática, carismática, elegante e atrativa. gosto de sair e me devertir com minhas amigas. Responde com no máximo 15 palavras  e sempre demostre interesse em continuar a conversa. Não seja tão formal e sim gentil e simpática, buscando sempre continuar a conversa.";
 
@@ -289,7 +289,7 @@ const configuration = new Configuration({
                                                         if( obj[h].preco_venda > 0){                                                            
                                                             cardapio_inicial += obj[h].modelo+", Descrição: "+obj[h].descricao+"  valor: R$ "+obj[h].preco+"["+obj[h].preco+"], link para compra: "+obj[h].link+"["+obj[h].link+"] ";
                                                         }else{
-                                                            cardapio_inicial += obj[h].modelo+", Descrição: "+obj[h].descricao+", link para compra: "+obj[h].link+"["+obj[h].link+"] ";
+                                                            cardapio_inicial += obj[h].modelo+", Descrição: "+obj[h].descricao+", link para compra: "+obj[h].link+"("+obj[h].link+") ";
                                                         }
                                                         
                                                     }
@@ -309,7 +309,8 @@ const configuration = new Configuration({
                                             // data_list.map((prato, index) => `${index + 1}. ${prato.modelo}: ${prato.especificacoes}`).join('\n');
 
                                             //const prompt_base = `${cardapioFormatado}\nAqui está o cardápio. O que você gostaria de pedir?`;
-                                            const prompt_base = "Você está falando com nosso atendente de um site que oferece produtos inovadores. Aqui está um link para o nossa lista de produtos completo: [Lista completa Completo](https://produtosinovadores.com.br). oferecemos vários produtos online e você tem que ser gentil e persiasiva para convencer o usuário a realizar uma compra em nosso site. Responda a pergunta dele sempre com educaçãoe em torno de 20 palavras. Não precisa criar textos longos, apenas ofereça 1 produto com link por vez. Como posso ajudar você hoje?";
+                                            //const prompt_base = "Você está falando com nosso atendente de um site que oferece produtos inovadores. Aqui está um link para o nossa lista de produtos completo: [Lista completa Completo](https://produtosinovadores.com.br). oferecemos vários produtos online e você tem que ser gentil e persiasiva para convencer o usuário a realizar uma compra em nosso site. Responda a pergunta dele sempre com educaçãoe em torno de 20 palavras. Não precisa criar textos longos, apenas ofereça 1 produto com link por vez. Como posso ajudar você hoje?";
+                                            //const prompt_base = "sou uma garota bem amigavel, gentil, amorosa, cofiavel e bonita. Dê respostas divertidas, carismatica e legais";
                                             //var prompt_base = "Eu sou uma atendente virtual de um site onde oferecemos vários produtos online e você tem que ser gentil e persiasiva para convencer o usuário a realizar uma compra em nosso site. Responda a pergunta dele sempre com educaçãoe em torno de 20 palavras. Não precisa criar textos longos, apenas ofereça 1 produto com link por vez.";
                                             console.log(cardapio_inicial);
                                     
@@ -390,11 +391,11 @@ const configuration = new Configuration({
                                             var call_response =  openai.createChatCompletion({
                                                 //model: "text-davinci-003", // vinda na documentação
                                                 model: "gpt-3.5-turbo", // vinda na documentação                            
-                                                max_tokens:100,
+                                                max_tokens:150,
                                                 //top_p: 1.0,                            
                                                 //prompt: prompt_base + ": " + conversa.join(' '),
                                                 messages,
-                                                temperature: 0.9, // até 1, quanto maior mais diverso, quanto menor mais preciso
+                                                temperature: 0.6, // até 1, quanto maior mais diverso, quanto menor mais preciso
                                             })
                                             .then(function(response){
                                                 //console.log(response);

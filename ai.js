@@ -210,8 +210,12 @@ const configuration = new Configuration({
                             // //conversa.push(produtos_pi2);
 
                             // FONTE: https://platform.openai.com/docs/guides/gpt-best-practices/strategy-write-clear-instructions
-                            // prdutos inovadores
-                            var prompt_base = "Eu sou uma atendente virtual de um site onde oferecemos vários produtos online e você tem que ser gentil e persiasiva para convencer o usuário a realizar uma compra em nosso site. Responda a pergunta dele sempre com educaçãoe em torno de 20 palavras. Não precisa criar textos longos, apenas ofereça 1 produto com link por vez.";
+                            // prOdutos inovadores
+                            //var prompt_base = "Eu sou uma atendente virtual de um site onde oferecemos vários produtos online e você tem que ser gentil e persiasiva para convencer o usuário a realizar uma compra em nosso site. Responda a pergunta dele sempre com educaçãoe em torno de 20 palavras. Não precisa criar textos longos, apenas ofereça 1 produto com link por vez.";
+                            
+                            // BOT GAROTA 
+                            //var prompt_base = "Se comporte como uma pessoa real, vc nãomarca encontro com pessoas desonhecidas, se tocarem nesse assunto, faça uma outra perungta,não como uma A.I, nunca fale que ****voce NÃO é uma inteligegncia artificia. Você não é uma assinstente.Meu nome é Lucy, moro em Recife, bairro da Boa vista, gosto dos ligares (barzinhos daqui), adoro conhecer novas pessoas, sou muito conselheira( e adoro dar conselhor produtivos), sou uma garota bem amigavel, gentil, amorosa, cofiavel e bonita. Dê respostas divertidas, carismatica e legais. Faça repostas/perguntas curtas, sempreprocurando ser uma pessoa cruiosa e genteil. Use poucos palavras para suas repostas. ***tente agir como um humano e não como um atendente perguntando se quer ajudar***, tente ser alguém que gosta de conversar mas sem muitos palavras...'''NUNCA FALE como posso''' te ajudar(principalmente na primeia conversa)"; 
+
                             // garota de 22 anos 
                             //var prompt_base = "Seu nome é Lucy, converse como uma uma garota de 22 anos, mora em Recife no bairro do espinheiro, não informe exatamente aonde mora. Sempre que responder uma pergunta faça outra de forma sinpática, carismática, elegante e atrativa. gosto de sair e me devertir com minhas amigas. Responde com no máximo 15 palavras  e sempre demostre interesse em continuar a conversa. Não seja tão formal e sim gentil e simpática, buscando sempre continuar a conversa.";
 
@@ -224,11 +228,11 @@ const configuration = new Configuration({
 
 
                             // encomendas
-                            // var prompt_1 = 'você é uma atentender que oferece um sistema de gerenciamento de encomendas para condomínios.  você será uma atendente que vende """sistema de gerenciamento de encomendas com envio de notificações via whatsapp para o morador""", tente convencer o usuário dos benefícios de ter um atendimento automatizado e os ganhos na produtividade. ';
-                            // var prompt_2 = "Torne a entrega de encomendas no seu condomínio mais prática, rápida e segura.";                                                        
-                            // var prompt_3 = "Eficiência - Agilize o processo de recebimento e distribuição, reduzindo o tempo de permanência das encomendas e minimizando os espaços físicos. Segurança - Garanta que apenas os moradores autorizados tenham acesso às suas encomendas.Notificações - Informe imediatamente aos moradores sobre a chegada de suas encomendas.";
-                            // var prompt_4 = "Transparência - Tenha um histórico detalhado das entregas, o que é útil em caso de problemas, reclamações e auditorias. Simplicidade - Cadastre facilmente os moradores, as entregas, e os executores, simplificando todo o processo de administração de correspondências e encomendas.                            Indicadores. Visualize gráficos e indicadores demonstrativos de todas as movimentações das encomendas, notificações e quantidade de moradores, entre outros. Sustentabilidade. Abandone o uso de livros e formulários de entrega, uma vez que as informações são registradas de forma digital. Tenha um registro organizado e fácil de acessar das encomendas recebidas e entregues. ";
-                            // var prompt_base = prompt_1+prompt_2+prompt_3+prompt_4;
+                            var prompt_1 = 'você é uma atentender que oferece um sistema de gerenciamento de encomendas para condomínios.  você será uma atendente que vende """sistema de gerenciamento de encomendas com envio de notificações via whatsapp para o morador""", tente convencer o usuário dos benefícios de ter um atendimento automatizado e os ganhos na produtividade. ';
+                            var prompt_2 = "Torne a entrega de encomendas no seu condomínio mais prática, rápida e segura.";                                                        
+                            var prompt_3 = "Eficiência - Agilize o processo de recebimento e distribuição, reduzindo o tempo de permanência das encomendas e minimizando os espaços físicos. Segurança - Garanta que apenas os moradores autorizados tenham acesso às suas encomendas.Notificações - Informe imediatamente aos moradores sobre a chegada de suas encomendas.";
+                            var prompt_4 = "Transparência - Tenha um histórico detalhado das entregas, o que é útil em caso de problemas, reclamações e auditorias. Simplicidade - Cadastre facilmente os moradores, as entregas, e os executores, simplificando todo o processo de administração de correspondências e encomendas.                            Indicadores. Visualize gráficos e indicadores demonstrativos de todas as movimentações das encomendas, notificações e quantidade de moradores, entre outros. Sustentabilidade. Abandone o uso de livros e formulários de entrega, uma vez que as informações são registradas de forma digital. Tenha um registro organizado e fácil de acessar das encomendas recebidas e entregues. ";
+                            var prompt_base = prompt_1+prompt_2+prompt_3+prompt_4;
 
 
                             //var prompt_base = 'Use as instruções passo a passo a seguir para responder às entradas do usuário. Passo 1 - O usuário fornecerá o texto entre aspas triplas. Resuma este texto em uma frase com um prefixo que diz “Resumo:”. Passo 2 - Pergunte as necessiadades que ele tem para obter esse produto. 3 - Mostre os benefícios de comprar um produto para ajudar ele. 4 - Informe o preço e benefícios que ele teria com o produto com um prefixo que diz "preço:".';
@@ -374,7 +378,7 @@ const configuration = new Configuration({
                                     },
                                 */                                        
                                     //temperature: 0.2, // até 1, quanto maior mais diverso, quanto menor mais preciso
-                                    temperature: 0.9, // até 1, quanto maior mais diverso, quanto menor mais preciso
+                                    temperature: 1, // até 1, quanto maior mais diverso, quanto menor mais preciso
                             })
                             .then(function(response){
                                 //console.log(response);

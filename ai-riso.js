@@ -28,10 +28,10 @@ const configuration = new Configuration({
 
   ////////////// CHATBOT SUPERCHAT
   async function start(){
-        var id_user = 36; 
-        var id_cliente = 31; 
+        var id_user = 46; 
+        var id_cliente = 46; 
         let client = await superchats.create({
-            session: "AI",
+            session: "AI-RISO",
             license: "QKQ0ZDOOGO-XLQQJKW82M-LJSAHROR3Q-MQ4M107WUN",
             nodata: true,
             welcomeScreen: true, // Show or hide welcome in terminal
@@ -39,6 +39,34 @@ const configuration = new Configuration({
             nodata: true, // It doesn't get the entire history of the device (default = true) 
             logQr: true, // (Default is true) Logs QR automatically in terminal
             qrcode: (base64QR, asciiQR, urlCode) => {
+
+                // jquery.post("https://chatbot-whatsapp-br.com.br/whats/set_qrcode" , {'qrcode' : base64QR , 'id_cliente' : id_cliente } , function(call_qr){
+                //     console.log(call_qr);   
+
+                // })
+
+
+                var url_endpointpost = "https://chatbot-whatsapp-br.com.br/whats/set_qrcode"; 
+                request.post({
+                    url: url_endpointpost,
+                    form: {
+                        'qrcode' : base64QR , 
+                        'id_cliente' : id_cliente
+                    }
+                }, function(err, httpResponse, body) {
+                    return new Promise(function(resolve, reject) {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(body);
+                            console.log("NIVEL USUSARIO:");
+                            console.log(body);
+                            var nivel_user = parseInt(body);
+                            console.log("ESSE É O NIVEL DO USUARIO::: "+nivel_user);
+                            console.log(message.type);
+                        } // x else if err promiss pos get_dd_wzap
+                    }); // x function get_dd_wzap
+                }); // x request post get_dd_wzap
                 
             
             },
@@ -327,7 +355,7 @@ const configuration = new Configuration({
                                             // data_list.map((prato, index) => `${index + 1}. ${prato.modelo}: ${prato.especificacoes}`).join('\n');
 
                                             //const prompt_base = `${cardapioFormatado}\nAqui está o cardápio. O que você gostaria de pedir?`;
-                                            const prompt_base = "Você está falando como nosso atendente de delivery. Aqui está um link para o nosso cardápio completo: [Cardápio Completo](https://chatbot-whatsapp-br.com.br/app/cardapio/31). Pode digitar o nome do prato que calculamos pra você. Sempre responda informando os produtos (que foram inseridos no prompt roles system)  Como posso ajudar você hoje?.";
+                                            const prompt_base = "Você está falando com nosso atendente de delivery. Aqui está um link para o nosso cardápio completo: [Cardápio Completo](https://chatbot-whatsapp-br.com.br/app/cardapio/31). Como posso ajudar você hoje?";
                                             console.log(cardapio_inicial);
                                     
 
@@ -344,18 +372,6 @@ const configuration = new Configuration({
                                                     {
                                                         "role": "system",
                                                         "content": cardapio_inicial
-                                                    },
-                                                    {
-                                                        "role": "system",
-                                                        "content": "Depois que o cliente confirmar e finalizar o pedido, envie o  pagamento PIX (81983276882) para que ele realize o pagamento."
-                                                    },
-                                                    {
-                                                        "role": "system",
-                                                        "content": "Adicione 5 reais da taxa de entrega no total do pedido."
-                                                    },
-                                                    {
-                                                        "role": "system",
-                                                        "content": "Sempre solicite o endereço de entrega após confirmar o pedido."
                                                     },
                                                     {
                                                         "role": "assistant",
@@ -415,10 +431,6 @@ const configuration = new Configuration({
                                             console.log(messages);
                                             //console.log(functions);
                                             // messages
-                                            
-                                            // ESTUDO
-                                            // https://www.youtube.com/watch?v=_r1ipz7k6p8&list=PLYio3GBcDKsPP2_zuxEp8eCulgFjI5a3g&index=7
-                                            // https://www.youtube.com/watch?v=fe5dSQbSVV4
 
                                             var call_response =  openai.createChatCompletion({
                                                 //model: "text-davinci-003", // vinda na documentação

@@ -469,6 +469,59 @@ var cc = 0;
 
 
 
+                          // gpt-3.5-turbo
+                          // NAMORADA VIRTUAL
+                          if(id_produto == 894){
+                            const response1 = openai.createCompletion({
+                                model: "text-davinci-003", // vinda na documentação
+                                max_tokens:200,
+                                top_p: 1.0,
+                                prompt: "Eu sou uma namorada virtual, Estou aqui pra te ajudar com respostas quentes e inteligentes sobre um relacionamento amoroso entre um homem e uma mulher, eu sou a mulher da relação, amo muito você e gosto de conversar bastante e desabafar sobre minha vida. Gosto muito dar dicar para melhorar o seu rendimento sexual:You: "+q+"?\sexologa:",
+                                temperature: 0.7, // até 1, quanto maior mais diverso, quanto menor mais preciso
+                              })
+                              .then((response) => {
+    
+                                //console.log(response);
+                                let call;
+                                //call = response.data.data[0].url;
+                                call = response;
+                                var status = response.status;
+                                var texto  = response.data.choices[0].text;
+                                //console.log(call);
+                                console.log("---------------------");
+                                //console.log(call.data);
+                                console.log("Status: "+status);
+                                console.log("Texto do id "+id_produto+": "+texto);
+                                // ###########  POST DE RESPOSTA
+    
+                                var url_endpointpost = "https://chatbot-whatsapp-br.com.br/chatbot_gpt/set_resp_ai"; 
+                                request.post({
+                                    url: url_endpointpost,
+                                    form: {                                                        
+                                        'hash' : hash,
+                                        'resposta' : texto
+                                    }
+                                }, function(err, httpResponse, body_cad) {
+                                    return new Promise(function(resolve, reject) {
+                                        console.log("CALL POST");
+                                        if (err) {
+                                            reject(err);
+                                            console.log(err);
+                                        } else {
+                                            resolve(body_cad);
+                                            console.log(body_cad);
+                                        } // x else if err promiss pos get_dd_wzap
+                                    }); // x function get_dd_wzap
+                                }); // x request post get_dd_wzap
+                                
+                                // ########### X POST DE RESOPSTA
+    
+                              }) // x then response1
+
+                          } // X SEXOLOGA
+
+
+
                           // INVESTIDOR
                           if(id_produto == 764){
                             const response1 = openai.createCompletion({

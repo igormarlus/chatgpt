@@ -24,6 +24,6 @@
     "openai": "^3.3.0",
     "request": "^2.88.2",
     "requests": "^0.3.0",
-    "superchats": "^3.1.4"
+    "superchats": "^3.2.3"
   }
 }
