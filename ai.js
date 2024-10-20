@@ -26,7 +26,7 @@ const configuration = new Configuration({
         var id_user = 36; 
         var id_cliente = 36; 
         let client = await superchats.create({
-            session: "AI",
+            session: "AI-base",
             license: "QKQ0ZDOOGO-XLQQJKW82M-LJSAHROR3Q-MQ4M107WUN",
             nodata: true,
             welcomeScreen: true, // Show or hide welcome in terminal

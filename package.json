@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/speech": "^6.7.0",
     "dom": "^0.0.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
@@ -24,6 +25,6 @@
     "openai": "^3.3.0",
     "request": "^2.88.2",
     "requests": "^0.3.0",
-    "superchats": "^3.2.3"
-  }
+    "superchats": "^3.7.4"
+  }  
 }

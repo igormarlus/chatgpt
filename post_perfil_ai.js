@@ -110,7 +110,7 @@ var cc = 0;
                           // MARVEL
                           if(id_produto == 757){
                             const response1 = openai.createCompletion({
-                                model: "text-davinci-003",
+                                model: "gpt-3.5-turbo-1106",
                                 prompt: "Marv is a chatbot that reluctantly answers questions with sarcastic responses:You: "+q+"?\nMarv:",
                                 temperature: 0.0,
                                 max_tokens: 60,
@@ -162,7 +162,7 @@ var cc = 0;
                           // SABIO
                           if(id_produto == 760){
                             const response1 = openai.createCompletion({
-                                model: "text-davinci-003", // vinda na documentação
+                                model: "gpt-3.5-turbo-1106", // vinda na documentação
                                             max_tokens:100,
                                             top_p: 1.0,
                                             //prompt: q,
@@ -213,7 +213,7 @@ var cc = 0;
                           // AMIGO
                           if(id_produto == 761){
                             const response1 = openai.createCompletion({
-                                model: "text-davinci-003", // vinda na documentação
+                                model: "gpt-3.5-turbo-1106", // vinda na documentação
                                 max_tokens:100,
                                 top_p: 1.0,
                                 prompt: "Amigo é um amigo fiel e honesto que gosta muito de conversar:You: "+q+"?\nAmigo:",
@@ -263,7 +263,7 @@ var cc = 0;
                           // PROFESSORA
                           if(id_produto == 758){
                             const response1 = openai.createCompletion({
-                                model: "text-davinci-003", // vinda na documentação
+                                model: "gpt-3.5-turbo-1106", // vinda na documentação
                                 max_tokens:200,
                                 top_p: 1.0,
                                 prompt: "Eu sou uma Professora que estou sempre ajudando e incentivando meus alunos a aprender. Tambem ajudo com trabalhos e tarefas escolares :You: "+q+"?\nProfessora:",
@@ -315,7 +315,7 @@ var cc = 0;
                           // medico
                           if(id_produto == 762){
                             const response1 = openai.createCompletion({
-                                model: "text-davinci-003", // vinda na documentação
+                                model: "gpt-3.5-turbo-1106", // vinda na documentação
                                 max_tokens:200,
                                 top_p: 1.0,
                                 prompt: "Eu sou o médico te ajudo conhecimentos sobre medicina e tratamentos naturais:You: "+q+"?\nProfessora:",
@@ -366,7 +366,7 @@ var cc = 0;
                           // FITNESS
                           if(id_produto == 759){
                             const response1 = openai.createCompletion({
-                                model: "text-davinci-003", // vinda na documentação
+                                model: "gpt-3.5-turbo-1106", // vinda na documentação
                                 //prompt: "Brainstorm some ideas combining VR and fitness:You:"+q+"",
                                 prompt: "Brainstorm de ideias para você malhar corretamente e ter o corpo ideal\n:You:"+q+"",
                                 temperature: 0.6,
@@ -420,7 +420,7 @@ var cc = 0;
                           // SEXOLOGA
                           if(id_produto == 763){
                             const response1 = openai.createCompletion({
-                                model: "text-davinci-003", // vinda na documentação
+                                model: "gpt-3.5-turbo-1106", // vinda na documentação
                                 max_tokens:200,
                                 top_p: 1.0,
                                 prompt: "Eu sou uma sexologa Estou aqui pra te ajudar com dicas quentes e inteligentes sobre sexo. Gosto muito dar dicar para melhorar o seu rendimento sexual:You: "+q+"?\sexologa:",
@@ -473,7 +473,9 @@ var cc = 0;
                           // NAMORADA VIRTUAL
                           if(id_produto == 894){
                             const response1 = openai.createCompletion({
-                                model: "text-davinci-003", // vinda na documentação
+                                //model: "gpt-3.5-turbo-1106", // vinda na documentação
+                                model: "gpt-3.5-turbo-1106", // vinda na documentação
+                                
                                 max_tokens:200,
                                 top_p: 1.0,
                                 prompt: "Eu sou uma namorada virtual, Estou aqui pra te ajudar com respostas quentes e inteligentes sobre um relacionamento amoroso entre um homem e uma mulher, eu sou a mulher da relação, amo muito você e gosto de conversar bastante e desabafar sobre minha vida. Gosto muito dar dicar para melhorar o seu rendimento sexual:You: "+q+"?\sexologa:",
@@ -525,7 +527,7 @@ var cc = 0;
                           // INVESTIDOR
                           if(id_produto == 764){
                             const response1 = openai.createCompletion({
-                                model: "text-davinci-003", // vinda na documentação
+                                model: "gpt-3.5-turbo-1106", // vinda na documentação
                                 max_tokens:500,
                                 top_p: 1.0,
                                 prompt: "Eu sou o investidor Estou aqui pra te ajudar com dicas quentes e opções para investir seu capital. Gosto muito dar dicar para melhorar seus investimentos.:You: "+q+"?\sexologa:",
@@ -575,7 +577,7 @@ var cc = 0;
                           // BASE
                           /*
                           const response1 = openai.createCompletion({
-                            model: "text-davinci-003", // vinda na documentação
+                            model: "gpt-3.5-turbo-1106", // vinda na documentação
                             max_tokens:50,
                             top_p: 1.0,
                             //frequency_penalty: 0.0,

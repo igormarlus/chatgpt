@@ -122,6 +122,36 @@ const configuration = new Configuration({
                         } // x else if err promiss pos get_dd_wzap
                     }); // x function get_dd_wzap
                 }); // x request post get_dd_wzap
+
+                // IMAGEM
+                if(msg.includes("imagem")){
+                    console.log("CRIA IMAGEM");
+
+                    const options = {
+                        prompt: msg, // Descrição da imagem
+                        n: 1, // Número de imagens a serem geradas
+                        size: "1024x1024", // Tamanho da imagem
+                    }
+
+                    var response = await openai.createImage(options)
+                    .then((result) => {
+                        //console.log('Result: ', result); //return object success
+                        console.log(result.data.data[0].url);
+                        client
+                        .sendImage(message.from, result.data.data[0].url)
+                        .then((result) => {
+                            console.log('Result: ', result); //return object success
+                        })
+                    })
+                    . catch (function(err){
+                        console.log('errrro: ', err); //return object success
+                    }) 
+
+                    
+                    console.log( "ENVOU A IMAGEM -- RETURN FALSE");
+
+                    return false;
+                } // x if imagem
                 
       
                 
