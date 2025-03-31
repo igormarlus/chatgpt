@@ -3,8 +3,11 @@
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const express = require('express');
+const requestP = require('request-promise');
 
 import request from "request";
+
+const axios = require('axios');
 
 const superchats = require("superchats");
 
@@ -14,6 +17,8 @@ import * as dotenv from 'dotenv';
 // speech
 import fs from "fs";
 import path from "path";
+
+import ffmpeg from 'fluent-ffmpeg';
 
 dotenv.config();
 
@@ -26,7 +31,9 @@ const configuration = new Configuration({
 
 function fazerConsulta(from,to=0) {
     return new Promise((resolve, reject) => {
-        const url_endpointpost = "https://chatbot-whatsapp-br.com.br/whats/get_conversa_wzap/" + from;
+        //const url_endpointpost = "https://chatbot-whatsapp-br.com.br/whats/get_conversa_wzap/" + from;
+        const url_endpointpost = "https://sentience.tec.br/ci/whats/get_conversa_wzap/" + from; 
+        
     
         request.post({
             url: url_endpointpost,
@@ -44,6 +51,70 @@ function fazerConsulta(from,to=0) {
             }
             });
         });
+}
+
+const API_KEY = 'sk_bbc50ab24a8f302207371c766331a2a63ea09c45e1021180';
+const VOICE_ID = 'pqHfZKP75CvOlQylNhV4'; // Substitua pelo ID real da voz
+const OUTPUT_FILE = 'output.mp3';
+
+async function generateVoice(text) {
+    try {
+        const response = await axios.post(
+            `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`,
+            {
+                text: text,
+                //model_id: 'eleven_monolingual_v1',
+                model_id: 'eleven_multilingual_v2',
+                voice_settings: { stability: 0.5, similarity_boost: 0.5 }
+            },
+            {
+                headers: {
+                    'xi-api-key': API_KEY,
+                    'Content-Type': 'application/json'
+                },
+                responseType: 'arraybuffer'
+            }
+        );
+
+        fs.writeFileSync("voz/"+OUTPUT_FILE, response.data);
+        console.log("✅ Áudio salvo como", OUTPUT_FILE);
+        return OUTPUT_FILE;
+
+        // Tocar o áudio
+        // exec('start voz/output.ogg', (err) => {
+        //     if (err) {
+        //         console.error("❌ Erro ao tocar o áudio:", err);
+        //     } else {
+        //         console.log("🎵 Áudio tocando...");
+        //     }
+        // });
+        // player.play(OUTPUT_FILE, (err) => {
+        //     if (err) console.error("❌ Erro ao tocar o áudio:", err);
+        // });
+
+    } catch (error) {
+        console.error("❌ Erro ao gerar a voz:", error.response?.data || error.message);
+    }
+}
+
+const inputFile = 'voz/output.mp3';  // Arquivo original
+const outputFile = 'voz/output.ogg'; // Arquivo convertido para OGG
+
+async function convertAudio(inputFile, outputFile) {
+    return new Promise((resolve, reject) => {
+        ffmpeg(inputFile)
+            .toFormat('ogg')
+            .audioCodec('libopus') // Codec Opus, essencial para WhatsApp
+            .on('end', () => {
+                console.log("✅ Conversão concluída:", outputFile);
+                resolve(outputFile);
+            })
+            .on('error', (err) => {
+                console.error("❌ Erro ao converter áudio:", err);
+                reject(err);
+            })
+            .save(outputFile);
+    });
 }
 
 // PROMPTS
@@ -71,12 +142,24 @@ function gerarPromptConselheiroAmoroso() {
     ].join(" ");
 }
 
+async function getProduto(id_produto) {
+    try {
+        var url_endpointpostPerfil = "https://sentience.tec.br/ci/whats/get_dd_produto/" + id_produto;
+        var  response_dd = await requestP.get({ uri: url_endpointpostPerfil, json: true });
+        
+        return response_dd; // Retorna os dados corretamente
+    } catch (error) {
+        console.error("Erro ao buscar produto:", error.message);
+        return null; // Retorna null em caso de erro
+    }
+}
+
 
 // X PROMPTS
 
 async function start(){
 let client = await superchats.create({
-  session: "AI-gpt",
+  session: "AI-gpt-sentience",
   license: "QKQ0ZDOOGO-XLQQJKW82M-LJSAHROR3Q-MQ4M107WUN",
   driveStorage: "local",
 //   qr?: false, // Breve
@@ -123,6 +206,9 @@ let client = await superchats.create({
         console.log(message.content.conversation); // 'Ff'
 
         const openai = new OpenAIApi(configuration);
+        
+
+        
 
         /*
         const speechFile = path.resolve("./speech.mp3");
@@ -154,7 +240,7 @@ let client = await superchats.create({
                     size: "1024x1024", // Tamanho da imagem
                 }
 
-                var response = openai.createImage(options)
+                var response_img = openai.createImage(options)
                 .then((result) => {
                     //console.log('Result: ', result); //return object success
                     console.log(result.data.data[0].url);
@@ -179,13 +265,23 @@ let client = await superchats.create({
         console.log("OK 1"); 
         console.log(message);
         var id_user = 1;
-        //var id_produto = 894; // namorada virtual
-        var id_produto = 913; // conselheiro amoroso
+        
+        //var id_produto = 4; // Kyra Kaelena
+        var id_produto = 3; // Adrian Voss
         var id_msg_whats = message.id;
         var device = message.device;
         
         var pergunta = msg.replace("A.I","");
         //var id_cliente = 0;
+
+        // get dd perfil
+        
+        var url_endpointpostPerfil = "https://sentience.tec.br/ci/whats/get_dd_produto/" + id_produto; 
+        //var dd_perfil = request.get(url_endpointpostPerfil);
+        var dd_perfil = await getProduto(id_produto); // Substitua pelo ID real
+        console.log(dd_perfil.descricao);
+        
+        //return false;
 
         ///console.log(message.device);
         
@@ -205,10 +301,21 @@ let client = await superchats.create({
             return false;
         }
         console.log(message);
+
+
+
+        // SEND AUDIO
+        //let response = await client.sendVoice(from, "https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3", '3EB01A690E67');
+        //let response = await client.sendVoice(from, "voz/output.mp3");
+        //let response = await client.sendAudio(from, "voz/output.ogg");
+        //let response = await client.sendVoice(from, "voz/output.mp3", '3EB01A690E67');
+        //console.log(response);
+        //return false;
         //jquery.post("https://chatbot-whatsapp-br.com.br/whats/get_dd_wzap/"+from , {'nome' : message.pushName ,'contato' : message.from , 'msg' : message.content , 'id_user' : id_user, 'id_produto' : id_produto , 'id_whats' : id_msg_whats , 'isgroup' : isgroup , 'id_group' : id_group  } , function(data_call){
         //var url_endpointpost = "https://chatbot-whatsapp-br.com.br/whats/get_dd_wzap/"+from; 
 
-        var url_endpointpost = "https://chatbot-whatsapp-br.com.br/whats/get_dd_wzap_ai/" + from; 
+        //var url_endpointpost = "https://chatbot-whatsapp-br.com.br/whats/get_dd_wzap_ai/" + from; 
+        var url_endpointpost = "https://sentience.tec.br/ci/whats/get_dd_wzap_ai/" + from; 
 
         var posts = {
             key: 'value',
@@ -226,7 +333,7 @@ let client = await superchats.create({
         }; 
 
         console.log("Dados enviados no POST:", posts); // Depuração para verificar dados enviados
-
+        
         // Fazendo o POST request
         request.post({
             url: url_endpointpost,
@@ -244,6 +351,7 @@ let client = await superchats.create({
             try {
                 var response_dd = JSON.parse(body); // Tentando fazer o parse da resposta
                 console.log("ID USER AI:", response_dd.user_ai); // Exibindo o ID_USER AI, se existir
+                
                 var coins =  response_dd.coins;
                 if(coins == 0){
                     console.log('Sem saldo');
@@ -256,6 +364,8 @@ let client = await superchats.create({
                 console.error("Erro ao fazer o parse da resposta:", parseError); // Exibe erro caso o body não seja JSON
                 console.log("Resposta recebida (não JSON):", body); // Mostra o conteúdo recebido, se não for JSON
             }
+
+            
         
 
         //return false;
@@ -269,11 +379,13 @@ let client = await superchats.create({
             var historico = JSON.parse(body);
             console.log("Conversa acumulada JSON");
             console.log(historico);
-            //return false;
+            
 
             var q = pergunta;
 
-            var prompt_base = gerarPromptNamorada();
+            //var prompt_base = gerarPromptNamorada();
+            var prompt_base = dd_perfil.descricao; // prompt
+            var prompt_system = dd_perfil.especificacoes;
             //var prompt_base = gerarPromptConselheiroAmoroso();
 
 
@@ -284,6 +396,14 @@ let client = await superchats.create({
             {
                 "role": "system",
                 "content": prompt_base
+            },
+            {
+                "role": "system",
+                "content": "Responda textos curtos, sempre procurando interação com o usuario, com o objetivo de continuar a conversa"
+            },
+            {
+                "role": "system",
+                "content": dd_perfil.modelo+ "É um perfil: "+prompt_system
             },
             /*
             {
@@ -322,7 +442,8 @@ let client = await superchats.create({
             //return false;
            
             
-            console.log(messages);
+            //console.log(messages);
+            //return false;
             //console.log(functions);
             // messages
 
@@ -352,10 +473,10 @@ let client = await superchats.create({
 
                 let call;
                 //call = response.data.data[0].url;
-                console.log("status: "+response);
+                //console.log("status: "+response);
                 console.log("CHOICE: "+response.data.choices[0]);
                 call = response;
-                console.log(call.data);
+                //console.log(call.data);
                 var status = response.status;
                 var texto_arr = response.data.choices[0].message;
                 var texto  = response.data.choices[0].message.content;
@@ -363,7 +484,8 @@ let client = await superchats.create({
                 console.log(texto);
 
                 // SETA NO BANCO
-                var url_endpointpost = "https://chatbot-whatsapp-br.com.br/whats/get_dd_wzap_ai/"+from; 
+                //var url_endpointpost = "https://chatbot-whatsapp-br.com.br/whats/get_dd_wzap_ai/"+from; 
+                var url_endpointpost = "https://sentience.tec.br/ci/whats/get_dd_wzap_ai/" + from; 
                 request.post({
                     url: url_endpointpost,
                     form: {
@@ -398,7 +520,43 @@ let client = await superchats.create({
                 client.sendText(message.from,texto,message.id)
                 .then((result) => {
                     console.log("A.I respondeu com sucesso!");
+
+                    //  GERAR AUDIO
+                   var audio_resp = generateVoice(texto)
+                    .then(function(resp_voz){
+
+                        //const inputFile = 'voz/'+audio_resp;  // Arquivo original
+                        const inputFile = 'voz/output.mp3'; // Arquivo convertido para OGG
+                        const outputFile = 'voz/output.ogg'; // Arquivo convertido para OGG
+
+                        const convertedFile =  convertAudio(inputFile, outputFile)
+                        .then(function(resp_conv){
+                            console.log(resp_conv)
+
+                            
+                            let responseAudio =  client.sendAudio(from, "voz/output.ogg")
+                            .then(function(call_cesponseAudio){
+                                console.log(call_cesponseAudio);
+                            })
+                            
+                           
+                        })
+                        .catch(function(err){
+                            console.log(err)
+                        })
+
+                   })
+
+                    
+                    
+                    
+                    
+                    
+
+
                 })
+            }).catch(function(err){
+                console.log("ERRO CATCH",err);
             })
             
                 
