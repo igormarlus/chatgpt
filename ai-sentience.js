@@ -53,19 +53,45 @@ function fazerConsulta(from,to=0) {
         });
 }
 
-const API_KEY = 'sk_bbc50ab24a8f302207371c766331a2a63ea09c45e1021180';
-const VOICE_ID = 'pqHfZKP75CvOlQylNhV4'; // Substitua pelo ID real da voz
+//const API_KEY = 'sk_bbc50ab24a8f302207371c766331a2a63ea09c45e1021180'; // igor
+const API_KEY = 'sk_206b7330815f890debd47742e463286a8db0bbafe9d8e9c0'; // Brenna Corry
+
+
+
+
+//const VOICE_ID = 'pqHfZKP75CvOlQylNhV4'; // Substitua pelo ID real da voz
+//const VOICE_ID = 'LcfcDJNUP1GQjkzn1xUU'; // Brenna Corry (Emily)
+//const VOICE_ID = '33B4UnXyTNbgLmdEDh5P'; // Brenna Corry (Keren) ********
+//const VOICE_ID = 'OB6x7EbXYlhG4DDTB1XU'; // Brenna Corry (Muchele)
+const VOICE_ID = 'XB0fDUnXU5powFXDhCwa'; // charllote
+
 const OUTPUT_FILE = 'output.mp3';
 
-async function generateVoice(text) {
+async function generateVoice(text,voz) {
     try {
         const response = await axios.post(
-            `https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`,
+            //`https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`,
+            `https://api.elevenlabs.io/v1/text-to-speech/${voz}`,
             {
                 text: text,
                 //model_id: 'eleven_monolingual_v1',
                 model_id: 'eleven_multilingual_v2',
-                voice_settings: { stability: 0.5, similarity_boost: 0.5 }
+                //voice_settings: { stability: 0.5, similarity_boost: 0.5 }
+                //voice_settings: { stability: 0.3, similarity_boost: 1.0, style: "conversational", style_exaggeration: 0.7 }
+                /*
+                voice_settings: { 
+                    stability: 0.3,          // Deixa a voz um pouco mais expressiva
+                    similarity_boost: 1.0,   // Mantém fidelidade à voz escolhida
+                    //style: "conversational", // Deixa o tom mais natural e envolvente
+                    style_exaggeration: 0.7  // Garante que a expressividade seja perceptível, mas não exagerada
+                }
+                */
+                voice_settings: { 
+                    stability: 0.1,          // Deixa a voz um pouco mais expressiva
+                    similarity_boost: 0.6,   // Mantém fidelidade à voz escolhida
+                    //style: "conversational", // Deixa o tom mais natural e envolvente
+                    style_exaggeration: 0.5  // Garante que a expressividade seja perceptível, mas não exagerada
+                }
             },
             {
                 headers: {
@@ -80,17 +106,7 @@ async function generateVoice(text) {
         console.log("✅ Áudio salvo como", OUTPUT_FILE);
         return OUTPUT_FILE;
 
-        // Tocar o áudio
-        // exec('start voz/output.ogg', (err) => {
-        //     if (err) {
-        //         console.error("❌ Erro ao tocar o áudio:", err);
-        //     } else {
-        //         console.log("🎵 Áudio tocando...");
-        //     }
-        // });
-        // player.play(OUTPUT_FILE, (err) => {
-        //     if (err) console.error("❌ Erro ao tocar o áudio:", err);
-        // });
+        
 
     } catch (error) {
         console.error("❌ Erro ao gerar a voz:", error.response?.data || error.message);
@@ -185,7 +201,7 @@ let client = await superchats.create({
     //return false;
     
      if ((message.type == "text" || message.subtype == 'text')  && message.content == "hi") {
-       await client.sendText(message.from, "Let's GO Superchats");
+       //await client.sendText(message.from, "Let's GO Superchats");
 
      }
 
@@ -208,28 +224,7 @@ let client = await superchats.create({
         const openai = new OpenAIApi(configuration);
         
 
-        
-
-        /*
-        const speechFile = path.resolve("./speech.mp3");
-
-        async function generateAudio(msg) {
-          if (msg.includes("audio")) {
-            console.log("TEM AUDIO");
-            console.log("Função de geração de áudio não suportada diretamente pela OpenAI.");
-        
-            // Aqui, você pode implementar o uso de outra API TTS como alternativa.
-        
-          } else {
-            console.log("NAO TEM AUDIO");
-          }
-        }
-        
-        // Chamando a função como exemplo
-        generateAudio("audio");
-
-        return false;
-        */
+   
         // IMAGEM
         if(msg.includes("imagem") || msg.includes("foto") || msg.includes("fotos")  ){
                 console.log("CRIA IMAGEM");
@@ -266,8 +261,11 @@ let client = await superchats.create({
         console.log(message);
         var id_user = 1;
         
-        //var id_produto = 4; // Kyra Kaelena
-        var id_produto = 3; // Adrian Voss
+        var id_produto = 4; // Kyra Kaelena
+        //var id_produto = 2; // Brenna Corry
+        //var id_produto = 4; // Kira
+        //var id_produto = 3; // Adrian Voss
+        //var id_produto = 7 // pastor davi sena
         var id_msg_whats = message.id;
         var device = message.device;
         
@@ -301,18 +299,6 @@ let client = await superchats.create({
             return false;
         }
         console.log(message);
-
-
-
-        // SEND AUDIO
-        //let response = await client.sendVoice(from, "https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3", '3EB01A690E67');
-        //let response = await client.sendVoice(from, "voz/output.mp3");
-        //let response = await client.sendAudio(from, "voz/output.ogg");
-        //let response = await client.sendVoice(from, "voz/output.mp3", '3EB01A690E67');
-        //console.log(response);
-        //return false;
-        //jquery.post("https://chatbot-whatsapp-br.com.br/whats/get_dd_wzap/"+from , {'nome' : message.pushName ,'contato' : message.from , 'msg' : message.content , 'id_user' : id_user, 'id_produto' : id_produto , 'id_whats' : id_msg_whats , 'isgroup' : isgroup , 'id_group' : id_group  } , function(data_call){
-        //var url_endpointpost = "https://chatbot-whatsapp-br.com.br/whats/get_dd_wzap/"+from; 
 
         //var url_endpointpost = "https://chatbot-whatsapp-br.com.br/whats/get_dd_wzap_ai/" + from; 
         var url_endpointpost = "https://sentience.tec.br/ci/whats/get_dd_wzap_ai/" + from; 
@@ -384,6 +370,8 @@ let client = await superchats.create({
             var q = pergunta;
 
             //var prompt_base = gerarPromptNamorada();
+            var nome_perfil = dd_perfil.modelo;
+            var voz = dd_perfil.voz;
             var prompt_base = dd_perfil.descricao; // prompt
             var prompt_system = dd_perfil.especificacoes;
             //var prompt_base = gerarPromptConselheiroAmoroso();
@@ -395,26 +383,9 @@ let client = await superchats.create({
             const messages = [
             {
                 "role": "system",
-                "content": prompt_base
+                "content": prompt_base+"\n\n"+prompt_system+"\n\nResponda textos curtos, sempre procurando interação com o usuario, com o objetivo de continuar a conversa\n\nProcure perguntar o nome do usuario nas primeiras (de acordo com a quantidade de role no prompt) mensagens e procurar utilizar o nome dele nas respostas"
             },
-            {
-                "role": "system",
-                "content": "Responda textos curtos, sempre procurando interação com o usuario, com o objetivo de continuar a conversa"
-            },
-            {
-                "role": "system",
-                "content": dd_perfil.modelo+ "É um perfil: "+prompt_system
-            },
-            /*
-            {
-                "role": "assistant",
-                "content": 'Se for enviado um texto que contenha a palavra """sugar""", explique esse conteúdo a seguir: O relacionamento Sugar, foi criado pelos americanos há mais uma década, mas nos últimos anos, criou-se um mercado em torno de pessoas que buscam um relacionamento benéfico para ambos, onde dinheiro não é um tabu. VENHA FAZER PARTE DESSE UNIVERSO. SEJA UMA SUGAR BABY AMBICIOSA.'
-            },
-            {
-                "role" : "assistant",
-                "content" : "Após a pessoa demostrar interesse mande o link [https://go.hotmart.com/N78576577V](https://go.hotmart.com/N78576577V) "
-            }
-            */
+      
             ];
 
             if(historico != "0" && historico != 0){
@@ -425,10 +396,7 @@ let client = await superchats.create({
                     "role": conversa.role,
                     "content": conversa.content
                     });
-                    // messages.push({
-                    //   "role": "assistant",
-                    //   "content": conversa.assistantMessage
-                    // });
+             
                 });
             }
           
@@ -449,9 +417,18 @@ let client = await superchats.create({
 
             var call_response =  openai.createChatCompletion({
                 //model: "text-davinci-003", // vinda na documentação
-                model: "gpt-3.5-turbo", // vinda na documentação                            
+                //model: "gpt-3.5-turbo", // vinda na documentação                            
+                model: "gpt-4", // vinda na documentação                            
                 max_tokens:200,
-                top_p: 0.5,                            
+                //top_p: 0.5,   
+                //max_tokens: 500,
+                temperature: 0.9, // Mantém um equilíbrio entre criatividade e coerência (quanto menor mais previsiveis e diretas, quanto maior mais criativas )
+                top_p: 0.9,      // Garante respostas variadas sem exagerar na aleatoriedade
+                //presence_penalty: 1.2, //  // Evita repetição excessiva de palavras   (de -2.0 à 2.0)  
+                presence_penalty: 1.0,    // Evita repetir ideias
+                frequency_penalty: 1.2,   // Evita repetir palavras    
+                stop: ["bye", "Até logo", "Fui","xau"], // parar qd houver essas palavras    
+                //response_format: "json", // gtp-4-turbo      
                 //prompt: prompt_base + ": " + conversa.join(' '),
                 messages,
                 //functions: functions_clima,
@@ -465,7 +442,7 @@ let client = await superchats.create({
                     },
                 */                                        
                     //temperature: 0.2, // até 1, quanto maior mais diverso, quanto menor mais preciso
-                    temperature: 0.9, // até 1, quanto maior mais diverso, quanto menor mais preciso
+                    //temperature: 0.9, // até 1, quanto maior mais diverso, quanto menor mais preciso
             })
             .then(function(response){
                 //console.log(response);
@@ -517,13 +494,15 @@ let client = await superchats.create({
                 // X SETA NO BANCO 
 
 
-                client.sendText(message.from,texto,message.id)
+                client.sendText(message.from,"*"+nome_perfil+"*:\n\n"+texto,message.id)
                 .then((result) => {
                     console.log("A.I respondeu com sucesso!");
+                    client.setPresence(message.from, 'r');
 
                     //  GERAR AUDIO
-                   var audio_resp = generateVoice(texto)
+                   var audio_resp = generateVoice(texto,voz)
                     .then(function(resp_voz){
+                        client.setPresence(message.from, 'r');
 
                         //const inputFile = 'voz/'+audio_resp;  // Arquivo original
                         const inputFile = 'voz/output.mp3'; // Arquivo convertido para OGG
@@ -533,7 +512,7 @@ let client = await superchats.create({
                         .then(function(resp_conv){
                             console.log(resp_conv)
 
-                            
+                            client.setPresence(message.from, 'r');
                             let responseAudio =  client.sendAudio(from, "voz/output.ogg")
                             .then(function(call_cesponseAudio){
                                 console.log(call_cesponseAudio);
@@ -547,15 +526,10 @@ let client = await superchats.create({
 
                    })
 
-                    
-                    
-                    
-                    
-                    
-
-
                 })
             }).catch(function(err){
+                client.sendText(message.from,"Ops, algo deu errado! 😢");
+                client.sendText("5581983276882","Ops, algo deu errado! 😢");
                 console.log("ERRO CATCH",err);
             })
             
