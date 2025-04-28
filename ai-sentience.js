@@ -261,8 +261,8 @@ let client = await superchats.create({
         console.log(message);
         var id_user = 1;
         
-        var id_produto = 4; // Kyra Kaelena
-        //var id_produto = 2; // Brenna Corry
+        //var id_produto = 4; // Kyra Kaelena
+        var id_produto = 2; // Brenna Corry
         //var id_produto = 4; // Kira
         //var id_produto = 3; // Adrian Voss
         //var id_produto = 7 // pastor davi sena
