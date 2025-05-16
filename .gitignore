@@ -1,5 +1,5 @@
 /node_modules/
-/tmp/
+#/tmp/
 /node_modules/
 /images/
 /tokens/
